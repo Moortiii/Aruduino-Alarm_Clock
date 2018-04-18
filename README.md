@@ -18,6 +18,10 @@ Below is a sketch of the alarm clock created using the simulator on TinkerCad. T
 
 ![Connections / Wiring](https://i.imgur.com/zKPOMVa.png)
 
+Here is a gif showing the alarm clock in action.
+
+![Alarm Clock GIF](https://i.imgur.com/6JAYpxA.gifv)
+
 ## User Interface
 The Alarm Clock is equipped with three buttons and a potentiometer.
 
