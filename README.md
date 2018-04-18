@@ -14,11 +14,9 @@ Digital Alarm Clock created using the Genuino Starter Kit which comes with an Ar
  - LEDs indicate whether the alarm is enabled / snoozed / disabled
 
 ## Connections / Wiring
-Below is a sketch of the alarm clock created using the simulator on TinkerCad. The breadboard that comes with the Genuino Starter Kit is severely limited in terms of space and so fitting everything onto the board might be challenging. We personally recommend connecting all wires that  don't require a resistor and which go from the LCD to either GND or 5V directly underneath the display as it removes a ton of clutter.
+Below is a sketch of the alarm clock created using the simulator on TinkerCad. The breadboard that comes with the Genuino Starter Kit is severely limited in terms of space and so fitting everything onto the board might be challenging. I personally recommend connecting all wires that don't require a resistor and which go from the LCD to either GND or 5V directly underneath the display as it removes a ton of clutter. It is also possible to use the internal pull-up resistors, but for the best results I recommend setting up external pull-up resistors like done in the image below as the Arduino Library is somewhat finicky and occasionally bugs out.
 
-It is also possible to use the internal pull-up resistors as is done on the image below, but for the best results we recommend setting up external pull-up resistors as the Arduino Library is somewhat finicky and will occasionally bug out.
-
-![Connections / Wiring](https://i.imgur.com/nPtXubQ.png)
+![Connections / Wiring](https://i.imgur.com/zKPOMVa.png)
 
 ## User Interface
 The Alarm Clock is equipped with three buttons and a potentiometer.
@@ -54,17 +52,19 @@ Pressing the third button toggles the current alarm.
 
 The Arduino is set to fire an interrupt every 1000ms. There are four key variables:
 
- 1. **int** displayHours
- 2. **int** displayMinutes
- 3. **int** displaySeconds
+ 1. **long int** displayHours
+ 2. **long int** displayMinutes
+ 3. **long int** displaySeconds
  4. **long int** tick
+ 
+(Integers are 2 bit on the ATMEGA328P and will cause overflow when generating the tick unless using a long)
 
 The interrupt increases the displaySeconds by one every time it fires and a function turns this into a simple incrementing clock. Afterwards the hours, minutes and seconds are converted to a tick using the following arithmetic:
 
 *tick = (displayHours x 3600) + (displayMinutes x 60) + displaySeconds;*
 
-In order to check if an alarm should sound, a tick is created in the same way for the current alarm and the two numbers are compared.  One could argue that we are doing things backwards. It would be possible to store only a tick, increment it and transform it into human readable time. While this is perhaps simpler, there is one major drawback that comes to mind with this solution.
+In order to check if an alarm should sound, a tick is created in the same way for the current alarm and the two numbers are compared.  One could argue that I am doing things backwards. It would be possible to store only a tick, increment it and transform it into human readable time. While this is perhaps simpler, there is one major drawback that comes to mind with this solution.
 
 **Goal:** *The user should be able to easily adjust the current alarm / time*
 
-Storing only a tick means the potentiometer would need to map the numbers 0 - 1023 to the range 0 - 86400 and the user would have no way to adjust the hours minutes and seconds individually. Ultimately, we decided that this would be both tedious and frustrating to the users.
+Storing only a tick means the potentiometer would need to map the numbers 0 - 1023 to the range 0 - 86400 and the user would have no way to adjust the hours minutes and seconds individually. Ultimately, I decided that this would be both tedious and frustrating as a user.
